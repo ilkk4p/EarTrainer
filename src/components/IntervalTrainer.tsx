@@ -69,18 +69,18 @@ const IntervalTrainer = () => {
         <div className="flex items-center justify-center gap-3 mb-3">
           <Volume2 className="w-8 h-8 text-primary" />
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-            Intervalliharjoitus
+            Interval Trainer
           </h1>
         </div>
         <p className="text-muted-foreground text-lg">
-          Kuuntele intervalli ja tunnista se
+          Listen to an interval and identify it
         </p>
       </div>
 
       {/* Scale Selection */}
       <div className="w-full max-w-2xl mb-8">
         <label className="block text-sm font-medium text-muted-foreground mb-3 uppercase tracking-wider">
-          Asteikko
+          Scale
         </label>
         <div className="flex flex-wrap gap-2">
           {SCALES.map((scale) => (
@@ -116,7 +116,7 @@ const IntervalTrainer = () => {
             className="h-12 rounded-full px-6 gap-2"
           >
             <RotateCcw className="w-4 h-4" />
-            Toista
+            Replay
           </Button>
         )}
       </div>
@@ -125,17 +125,17 @@ const IntervalTrainer = () => {
       {gameState === "correct" && (
         <div className="flex items-center gap-2 mb-6 text-success font-semibold text-lg animate-in fade-in duration-300">
           <Check className="w-6 h-6" />
-          Oikein! {INTERVAL_NAMES[currentInterval!]}
+          Correct! {INTERVAL_NAMES[currentInterval!]}
         </div>
       )}
       {gameState === "wrong" && (
         <div className="mb-6 text-center animate-in fade-in duration-300">
           <div className="flex items-center justify-center gap-2 text-error font-semibold text-lg">
             <X className="w-6 h-6" />
-            Väärin!
+            Wrong!
           </div>
           <p className="text-muted-foreground mt-1">
-            Oikea vastaus: <span className="text-foreground font-medium">{INTERVAL_NAMES[currentInterval!]}</span>
+            Correct answer: <span className="text-foreground font-medium">{INTERVAL_NAMES[currentInterval!]}</span>
           </p>
         </div>
       )}
@@ -178,16 +178,16 @@ const IntervalTrainer = () => {
       {stats.total > 0 && (
         <div className="mt-10 flex items-center gap-6 text-sm">
           <div className="text-muted-foreground">
-            <span className="text-foreground font-semibold">{stats.correct}</span> / {stats.total} oikein
+            <span className="text-foreground font-semibold">{stats.correct}</span> / {stats.total} correct
           </div>
           <div className="text-muted-foreground">
-            Tarkkuus: <span className="text-foreground font-semibold">{accuracy}%</span>
+            Accuracy: <span className="text-foreground font-semibold">{accuracy}%</span>
           </div>
           <button
             onClick={handleReset}
             className="text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
           >
-            Nollaa
+            Reset
           </button>
         </div>
       )}
@@ -199,7 +199,7 @@ const IntervalTrainer = () => {
           className="mt-6 gap-2"
           size="lg"
         >
-          Seuraava
+          Next
           <Play className="w-4 h-4" />
         </Button>
       )}
