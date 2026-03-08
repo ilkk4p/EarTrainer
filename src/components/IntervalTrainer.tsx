@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Play, RotateCcw, Volume2, Check, X, Music, Layers, Piano } from "lucide-react";
+import { Play, RotateCcw, Volume2, Check, X, Music, Layers, Piano, Guitar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SCALES, INTERVAL_NAMES, getIntervalsForScale, type Scale } from "@/lib/scales";
 import { playInterval, replayInterval, type Instrument } from "@/lib/audio";
