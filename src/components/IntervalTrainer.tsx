@@ -125,17 +125,17 @@ const IntervalTrainer = () => {
       {gameState === "correct" && (
         <div className="flex items-center gap-2 mb-6 text-success font-semibold text-lg animate-in fade-in duration-300">
           <Check className="w-6 h-6" />
-          Oikein! {INTERVAL_NAMES[currentInterval!]}
+          Correct! {INTERVAL_NAMES[currentInterval!]}
         </div>
       )}
       {gameState === "wrong" && (
         <div className="mb-6 text-center animate-in fade-in duration-300">
           <div className="flex items-center justify-center gap-2 text-error font-semibold text-lg">
             <X className="w-6 h-6" />
-            Väärin!
+            Wrong!
           </div>
           <p className="text-muted-foreground mt-1">
-            Oikea vastaus: <span className="text-foreground font-medium">{INTERVAL_NAMES[currentInterval!]}</span>
+            Correct answer: <span className="text-foreground font-medium">{INTERVAL_NAMES[currentInterval!]}</span>
           </p>
         </div>
       )}
