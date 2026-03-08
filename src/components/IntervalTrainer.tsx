@@ -26,9 +26,9 @@ const IntervalTrainer = () => {
     setCurrentInterval(randomInterval);
     setSelectedAnswer(null);
     setGameState("guessing");
-    const root = playInterval(randomInterval, playMode === "harmonic");
+    const root = playInterval(randomInterval, playMode === "harmonic", instrument);
     setCurrentRoot(root);
-  }, [selectedScale, playMode]);
+  }, [selectedScale, playMode, instrument]);
 
   const handleReplay = useCallback(() => {
     if (currentInterval !== null && currentRoot !== null) {
