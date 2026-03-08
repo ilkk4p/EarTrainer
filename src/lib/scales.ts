@@ -59,14 +59,5 @@ export const INTERVAL_NAMES: Record<number, string> = {
 };
 
 export function getIntervalsForScale(scale: Scale): number[] {
-  const intervals = new Set<number>();
-  for (let i = 0; i < scale.semitones.length; i++) {
-    for (let j = i + 1; j < scale.semitones.length; j++) {
-      const diff = scale.semitones[j] - scale.semitones[i];
-      if (diff >= 1 && diff <= 12) {
-        intervals.add(diff);
-      }
-    }
-  }
-  return Array.from(intervals).sort((a, b) => a - b);
+  return scale.semitones.filter((s) => s >= 1 && s <= 12);
 }
