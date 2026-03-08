@@ -2,13 +2,14 @@ import { useState, useCallback } from "react";
 import { Play, RotateCcw, Volume2, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SCALES, INTERVAL_NAMES, getIntervalsForScale, type Scale } from "@/lib/scales";
-import { playInterval } from "@/lib/audio";
+import { playInterval, replayInterval } from "@/lib/audio";
 
 type GameState = "idle" | "playing" | "guessing" | "correct" | "wrong";
 
 const IntervalTrainer = () => {
   const [selectedScale, setSelectedScale] = useState<Scale>(SCALES[0]);
   const [currentInterval, setCurrentInterval] = useState<number | null>(null);
+  const [currentRoot, setCurrentRoot] = useState<number | null>(null);
   const [gameState, setGameState] = useState<GameState>("idle");
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [stats, setStats] = useState({ correct: 0, total: 0 });
@@ -21,14 +22,15 @@ const IntervalTrainer = () => {
     setCurrentInterval(randomInterval);
     setSelectedAnswer(null);
     setGameState("guessing");
-    playInterval(randomInterval);
+    const root = playInterval(randomInterval);
+    setCurrentRoot(root);
   }, [selectedScale]);
 
   const handleReplay = useCallback(() => {
-    if (currentInterval !== null) {
-      playInterval(currentInterval);
+    if (currentInterval !== null && currentRoot !== null) {
+      replayInterval(currentRoot, currentInterval);
     }
-  }, [currentInterval]);
+  }, [currentInterval, currentRoot]);
 
   const handleGuess = useCallback(
     (semitones: number) => {
