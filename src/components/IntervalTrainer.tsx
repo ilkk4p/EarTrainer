@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { Play, RotateCcw, Volume2, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SCALES, INTERVAL_NAMES, getIntervalsForScale, type Scale } from "@/lib/scales";
-import { playInterval } from "@/lib/audio";
+import { playInterval, replayInterval } from "@/lib/audio";
 
 type GameState = "idle" | "playing" | "guessing" | "correct" | "wrong";
 
