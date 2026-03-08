@@ -108,8 +108,8 @@ const IntervalTrainer = () => {
         </label>
         <div className="flex flex-col gap-2">
           {[
-            ["major", "major-pentatonic"],
-            ["natural-minor", "melodic-minor", "minor-pentatonic", "blues"],
+            ["major", "lydian", "major-pentatonic", "mixolydian"],
+            ["dorian", "natural-minor", "melodic-minor", "minor-pentatonic", "blues"],
             ["chromatic"],
           ].map((row, i) => (
             <div key={i} className="flex flex-wrap gap-2">
@@ -231,9 +231,6 @@ const IntervalTrainer = () => {
                     : "bg-card border-border opacity-60"
                 }`}
               >
-                <div className="font-mono text-xs text-muted-foreground mb-1">
-                  {semitones} st
-                </div>
                 <div className="font-semibold text-sm">
                   {INTERVAL_NAMES[semitones]}
                 </div>
