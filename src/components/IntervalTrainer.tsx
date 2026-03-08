@@ -178,16 +178,16 @@ const IntervalTrainer = () => {
       {stats.total > 0 && (
         <div className="mt-10 flex items-center gap-6 text-sm">
           <div className="text-muted-foreground">
-            <span className="text-foreground font-semibold">{stats.correct}</span> / {stats.total} oikein
+            <span className="text-foreground font-semibold">{stats.correct}</span> / {stats.total} correct
           </div>
           <div className="text-muted-foreground">
-            Tarkkuus: <span className="text-foreground font-semibold">{accuracy}%</span>
+            Accuracy: <span className="text-foreground font-semibold">{accuracy}%</span>
           </div>
           <button
             onClick={handleReset}
             className="text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
           >
-            Nollaa
+            Reset
           </button>
         </div>
       )}
