@@ -32,9 +32,9 @@ const IntervalTrainer = () => {
 
   const handleReplay = useCallback(() => {
     if (currentInterval !== null && currentRoot !== null) {
-      replayInterval(currentRoot, currentInterval, playMode === "harmonic");
+      replayInterval(currentRoot, currentInterval, playMode === "harmonic", instrument);
     }
-  }, [currentInterval, currentRoot, playMode]);
+  }, [currentInterval, currentRoot, playMode, instrument]);
 
   const handleGuess = useCallback(
     (semitones: number) => {
