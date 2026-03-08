@@ -35,67 +35,135 @@ function playNoteWithInstrument(
 // ─── Piano: layered harmonics with per-partial decay + soft hammer noise ───
 function playPiano(ctx: AudioContext, freq: number, start: number, dur: number) {
   const master = ctx.createGain();
+  
+  // Soundboard resonance simulation
+  const soundboard = ctx.createBiquadFilter();
+  soundboard.type = "peaking";
+  soundboard.frequency.value = 220;
+  soundboard.Q.value = 0.6;
+  soundboard.gain.value = 3;
+
+  const soundboard2 = ctx.createBiquadFilter();
+  soundboard2.type = "peaking";
+  soundboard2.frequency.value = 440;
+  soundboard2.Q.value = 0.5;
+  soundboard2.gain.value = 2;
+
+  // Warmth: gentle high-frequency rolloff (grand piano has mellow top end)
+  const warmth = ctx.createBiquadFilter();
+  warmth.type = "lowpass";
+  warmth.frequency.value = Math.min(freq * 8, 12000);
+  warmth.Q.value = 0.4;
+
+  // Presence peak around 2-4kHz (grand piano clarity)
+  const presence = ctx.createBiquadFilter();
+  presence.type = "peaking";
+  presence.frequency.value = 2800;
+  presence.Q.value = 0.8;
+  presence.gain.value = 2.5;
+
   const compressor = ctx.createDynamicsCompressor();
-  compressor.threshold.value = -20;
-  compressor.ratio.value = 4;
-  master.connect(compressor);
+  compressor.threshold.value = -18;
+  compressor.ratio.value = 3;
+  compressor.knee.value = 8;
+
+  master.connect(soundboard);
+  soundboard.connect(soundboard2);
+  soundboard2.connect(presence);
+  presence.connect(warmth);
+  warmth.connect(compressor);
   compressor.connect(ctx.destination);
 
-  // Hammer noise (short percussive transient)
-  const noiseLen = Math.floor(ctx.sampleRate * 0.015);
+  // Hammer felt noise — softer, more realistic thud
+  const noiseLen = Math.floor(ctx.sampleRate * 0.025);
   const noiseBuf = ctx.createBuffer(1, noiseLen, ctx.sampleRate);
   const noiseData = noiseBuf.getChannelData(0);
   for (let i = 0; i < noiseLen; i++) {
-    noiseData[i] = (Math.random() * 2 - 1) * 0.4;
+    // Shaped noise that decays within the buffer
+    const env = Math.exp(-i / (ctx.sampleRate * 0.005));
+    noiseData[i] = (Math.random() * 2 - 1) * 0.3 * env;
   }
   const noiseSrc = ctx.createBufferSource();
   noiseSrc.buffer = noiseBuf;
   const noiseGain = ctx.createGain();
-  noiseGain.gain.setValueAtTime(0.12, start);
-  noiseGain.gain.exponentialRampToValueAtTime(0.001, start + 0.02);
+  // Hammer is louder in upper register, softer in bass
+  const hammerVol = 0.04 + (freq / 4000) * 0.08;
+  noiseGain.gain.setValueAtTime(hammerVol, start);
+  noiseGain.gain.exponentialRampToValueAtTime(0.001, start + 0.035);
   const noiseFilt = ctx.createBiquadFilter();
-  noiseFilt.type = "highpass";
-  noiseFilt.frequency.value = Math.min(freq * 3, 8000);
+  noiseFilt.type = "bandpass";
+  noiseFilt.frequency.value = Math.min(freq * 4, 6000);
+  noiseFilt.Q.value = 0.8;
   noiseSrc.connect(noiseFilt);
   noiseFilt.connect(noiseGain);
   noiseGain.connect(master);
   noiseSrc.start(start);
-  noiseSrc.stop(start + 0.03);
+  noiseSrc.stop(start + 0.05);
 
-  // Partials with individual amplitude & decay
+  // Grand piano partials — more harmonics, realistic amplitudes & decay
+  // Based on spectral analysis of Steinway grand
   const partials = [
-    { ratio: 1, amp: 1.0, decayMul: 1.0 },
-    { ratio: 2, amp: 0.45, decayMul: 0.85 },
-    { ratio: 3, amp: 0.18, decayMul: 0.7 },
-    { ratio: 4, amp: 0.08, decayMul: 0.55 },
-    { ratio: 5, amp: 0.04, decayMul: 0.45 },
-    { ratio: 6, amp: 0.02, decayMul: 0.35 },
-    { ratio: 7, amp: 0.01, decayMul: 0.3 },
+    { ratio: 1,  amp: 1.0,   decayMul: 1.0 },
+    { ratio: 2,  amp: 0.65,  decayMul: 0.92 },
+    { ratio: 3,  amp: 0.35,  decayMul: 0.78 },
+    { ratio: 4,  amp: 0.20,  decayMul: 0.65 },
+    { ratio: 5,  amp: 0.12,  decayMul: 0.55 },
+    { ratio: 6,  amp: 0.07,  decayMul: 0.45 },
+    { ratio: 7,  amp: 0.04,  decayMul: 0.38 },
+    { ratio: 8,  amp: 0.025, decayMul: 0.32 },
+    { ratio: 9,  amp: 0.015, decayMul: 0.28 },
+    { ratio: 10, amp: 0.008, decayMul: 0.24 },
   ];
 
-  const baseVol = 0.12;
+  // Inharmonicity coefficient — higher for shorter (higher) strings
+  const B = 0.00012 * Math.pow(freq / 261.6, 0.5);
+
+  const baseVol = 0.13;
   partials.forEach(({ ratio, amp, decayMul }) => {
-    const pFreq = freq * ratio;
+    // Real piano inharmonicity: f_n = n * f0 * sqrt(1 + B * n^2)
+    const pFreq = freq * ratio * Math.sqrt(1 + B * ratio * ratio);
     if (pFreq > 16000) return;
 
     const osc = ctx.createOscillator();
     osc.type = "sine";
     osc.frequency.value = pFreq;
-    // Slight inharmonicity (like real piano strings)
-    osc.frequency.value = pFreq * (1 + ratio * ratio * 0.0001);
 
     const g = ctx.createGain();
-    const partDur = dur * decayMul;
+    const partDur = Math.max(dur * decayMul, 0.3);
+
+    // Attack: very fast but not instant (felt hammer)
+    const attackTime = 0.003 + ratio * 0.0005;
+    const peakAmp = baseVol * amp;
+
     g.gain.setValueAtTime(0, start);
-    g.gain.linearRampToValueAtTime(baseVol * amp, start + 0.005);
-    g.gain.setValueAtTime(baseVol * amp, start + 0.005);
-    g.gain.exponentialRampToValueAtTime(baseVol * amp * 0.3, start + partDur * 0.3);
+    g.gain.linearRampToValueAtTime(peakAmp, start + attackTime);
+    // Two-stage decay: fast initial drop then slow sustain (like real piano)
+    g.gain.exponentialRampToValueAtTime(peakAmp * 0.5, start + partDur * 0.08);
+    g.gain.exponentialRampToValueAtTime(peakAmp * 0.2, start + partDur * 0.35);
     g.gain.exponentialRampToValueAtTime(0.001, start + partDur);
 
     osc.connect(g);
     g.connect(master);
     osc.start(start);
     osc.stop(start + partDur + 0.05);
+  });
+
+  // Sympathetic string resonance — very quiet octave and fifth
+  [2.0, 1.5].forEach((mult, i) => {
+    const sFreq = freq * mult;
+    if (sFreq > 10000) return;
+    const osc = ctx.createOscillator();
+    osc.type = "sine";
+    osc.frequency.value = sFreq;
+    const g = ctx.createGain();
+    const sympAmp = (i === 0 ? 0.008 : 0.005) * baseVol;
+    g.gain.setValueAtTime(0, start);
+    g.gain.linearRampToValueAtTime(sympAmp, start + 0.15);
+    g.gain.exponentialRampToValueAtTime(0.001, start + dur * 0.8);
+    osc.connect(g);
+    g.connect(master);
+    osc.start(start);
+    osc.stop(start + dur * 0.8 + 0.05);
   });
 }
 
