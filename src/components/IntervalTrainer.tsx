@@ -22,14 +22,15 @@ const IntervalTrainer = () => {
     setCurrentInterval(randomInterval);
     setSelectedAnswer(null);
     setGameState("guessing");
-    playInterval(randomInterval);
+    const root = playInterval(randomInterval);
+    setCurrentRoot(root);
   }, [selectedScale]);
 
   const handleReplay = useCallback(() => {
-    if (currentInterval !== null) {
-      playInterval(currentInterval);
+    if (currentInterval !== null && currentRoot !== null) {
+      replayInterval(currentRoot, currentInterval);
     }
-  }, [currentInterval]);
+  }, [currentInterval, currentRoot]);
 
   const handleGuess = useCallback(
     (semitones: number) => {
