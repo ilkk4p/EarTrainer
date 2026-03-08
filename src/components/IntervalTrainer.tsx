@@ -80,7 +80,7 @@ const IntervalTrainer = () => {
       {/* Scale Selection */}
       <div className="w-full max-w-2xl mb-8">
         <label className="block text-sm font-medium text-muted-foreground mb-3 uppercase tracking-wider">
-          Asteikko
+          Scale
         </label>
         <div className="flex flex-wrap gap-2">
           {SCALES.map((scale) => (
