@@ -43,13 +43,18 @@ export function midiToFrequency(midi: number): number {
   return 440 * Math.pow(2, (midi - 69) / 12);
 }
 
-export function playInterval(semitones: number): void {
+export function playInterval(semitones: number): number {
   const ctx = getAudioContext();
   const now = ctx.currentTime;
-  
-  // Random root between C3 (48) and C5 (72)
   const root = 48 + Math.floor(Math.random() * 24);
-  
+  playNote(midiToFrequency(root), now, 0.8);
+  playNote(midiToFrequency(root + semitones), now + 0.9, 0.8);
+  return root;
+}
+
+export function replayInterval(root: number, semitones: number): void {
+  const ctx = getAudioContext();
+  const now = ctx.currentTime;
   playNote(midiToFrequency(root), now, 0.8);
   playNote(midiToFrequency(root + semitones), now + 0.9, 0.8);
 }
