@@ -102,6 +102,36 @@ const IntervalTrainer = () => {
         </div>
       </div>
 
+      {/* Play Mode Selection */}
+      <div className="w-full max-w-2xl mb-8">
+        <label className="block text-sm font-medium text-muted-foreground mb-3 uppercase tracking-wider">
+          Play Mode
+        </label>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setPlayMode("melodic")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+              playMode === "melodic"
+                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+            }`}
+          >
+            <Music className="w-4 h-4" />
+            Melodic
+          </button>
+          <button
+            onClick={() => setPlayMode("harmonic")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+              playMode === "harmonic"
+                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+            }`}
+          >
+            <Layers className="w-4 h-4" />
+            Harmonic
+          </button>
+        </div>
+      </div>
       {/* Play Controls */}
       <div className="flex items-center gap-4 mb-10">
         <Button
