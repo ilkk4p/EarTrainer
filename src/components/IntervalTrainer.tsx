@@ -15,6 +15,7 @@ const IntervalTrainer = () => {
   const [gameState, setGameState] = useState<GameState>("idle");
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [stats, setStats] = useState({ correct: 0, total: 0 });
+  const [playMode, setPlayMode] = useState<PlayMode>("melodic");
 
   const availableIntervals = getIntervalsForScale(selectedScale);
 
