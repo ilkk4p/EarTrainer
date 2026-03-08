@@ -67,7 +67,27 @@ const IntervalTrainer = () => {
   const accuracy = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
 
   return (
-    <div className="min-h-screen flex flex-col items-center px-4 py-8 md:py-16">
+    <div className="min-h-screen flex flex-col items-center px-4 py-8 md:py-16 relative">
+      {/* Instrument Selection — top right */}
+      <div className="absolute top-4 right-4 flex gap-2">
+        {([
+          { id: "piano" as Instrument, label: "Piano", icon: Piano },
+          { id: "guitar" as Instrument, label: "Guitar", icon: Guitar },
+        ]).map((inst) => (
+          <button
+            key={inst.id}
+            onClick={() => setInstrument(inst.id)}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
+              instrument === inst.id
+                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+            }`}
+          >
+            <inst.icon className="w-3.5 h-3.5" />
+            {inst.label}
+          </button>
+        ))}
+      </div>
       {/* Header */}
       <div className="text-center mb-10">
         <div className="flex items-center justify-center gap-3 mb-3">
