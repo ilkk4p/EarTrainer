@@ -116,7 +116,7 @@ const IntervalTrainer = () => {
             className="h-12 rounded-full px-6 gap-2"
           >
             <RotateCcw className="w-4 h-4" />
-            Toista
+            Replay
           </Button>
         )}
       </div>
