@@ -43,20 +43,20 @@ export function midiToFrequency(midi: number): number {
   return 440 * Math.pow(2, (midi - 69) / 12);
 }
 
-export function playInterval(semitones: number): number {
+export function playInterval(semitones: number, harmonic = false): number {
   const ctx = getAudioContext();
   const now = ctx.currentTime;
   const root = 48 + Math.floor(Math.random() * 24);
   playNote(midiToFrequency(root), now, 0.8);
-  playNote(midiToFrequency(root + semitones), now + 0.9, 0.8);
+  playNote(midiToFrequency(root + semitones), harmonic ? now : now + 0.9, 0.8);
   return root;
 }
 
-export function replayInterval(root: number, semitones: number): void {
+export function replayInterval(root: number, semitones: number, harmonic = false): void {
   const ctx = getAudioContext();
   const now = ctx.currentTime;
   playNote(midiToFrequency(root), now, 0.8);
-  playNote(midiToFrequency(root + semitones), now + 0.9, 0.8);
+  playNote(midiToFrequency(root + semitones), harmonic ? now : now + 0.9, 0.8);
 }
 
 export function getCurrentTime(): number {
