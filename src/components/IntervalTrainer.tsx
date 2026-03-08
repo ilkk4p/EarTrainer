@@ -9,6 +9,7 @@ type GameState = "idle" | "playing" | "guessing" | "correct" | "wrong";
 const IntervalTrainer = () => {
   const [selectedScale, setSelectedScale] = useState<Scale>(SCALES[0]);
   const [currentInterval, setCurrentInterval] = useState<number | null>(null);
+  const [currentRoot, setCurrentRoot] = useState<number | null>(null);
   const [gameState, setGameState] = useState<GameState>("idle");
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [stats, setStats] = useState({ correct: 0, total: 0 });
