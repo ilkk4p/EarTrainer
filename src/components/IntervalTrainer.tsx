@@ -93,7 +93,7 @@ const IntervalTrainer = () => {
         <div className="flex items-center justify-center gap-3 mb-3">
           <Volume2 className="w-8 h-8 text-primary" />
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-            Interval Trainer
+            Ear Trainer
           </h1>
         </div>
         <p className="text-muted-foreground text-lg">
