@@ -5,41 +5,13 @@ export interface Scale {
 }
 
 export const SCALES: Scale[] = [
-  {
-    id: "chromatic",
-    name: "Kromaattinen",
-    semitones: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-  },
-  {
-    id: "major",
-    name: "Duuri",
-    semitones: [0, 2, 4, 5, 7, 9, 11, 12],
-  },
-  {
-    id: "natural-minor",
-    name: "Luonnollinen molli",
-    semitones: [0, 2, 3, 5, 7, 8, 10, 12],
-  },
-  {
-    id: "melodic-minor",
-    name: "Melodinen molli",
-    semitones: [0, 2, 3, 5, 7, 9, 11, 12],
-  },
-  {
-    id: "major-pentatonic",
-    name: "Duuri pentatoninen",
-    semitones: [0, 2, 4, 7, 9, 12],
-  },
-  {
-    id: "minor-pentatonic",
-    name: "Molli pentatoninen",
-    semitones: [0, 3, 5, 7, 10, 12],
-  },
-  {
-    id: "blues",
-    name: "Blues",
-    semitones: [0, 3, 5, 6, 7, 10, 12],
-  },
+  { id: "chromatic", name: "Chromatic", semitones: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
+  { id: "major", name: "Major", semitones: [0, 2, 4, 5, 7, 9, 11, 12] },
+  { id: "natural-minor", name: "Natural Minor", semitones: [0, 2, 3, 5, 7, 8, 10, 12] },
+  { id: "melodic-minor", name: "Melodic Minor", semitones: [0, 2, 3, 5, 7, 9, 11, 12] },
+  { id: "major-pentatonic", name: "Major Pentatonic", semitones: [0, 2, 4, 7, 9, 12] },
+  { id: "minor-pentatonic", name: "Minor Pentatonic", semitones: [0, 3, 5, 7, 10, 12] },
+  { id: "blues", name: "Blues", semitones: [0, 3, 5, 6, 7, 10, 12] },
 ];
 
 export const INTERVAL_NAMES: Record<number, string> = {
