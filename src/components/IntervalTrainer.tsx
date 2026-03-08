@@ -199,7 +199,7 @@ const IntervalTrainer = () => {
           className="mt-6 gap-2"
           size="lg"
         >
-          Seuraava
+          Next
           <Play className="w-4 h-4" />
         </Button>
       )}
