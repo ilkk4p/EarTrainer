@@ -106,19 +106,30 @@ const IntervalTrainer = () => {
         <label className="block text-sm font-medium text-muted-foreground mb-3 uppercase tracking-wider">
           Scale
         </label>
-        <div className="flex flex-wrap gap-2">
-          {SCALES.map((scale) => (
-            <button
-              key={scale.id}
-              onClick={() => handleScaleChange(scale)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                selectedScale.id === scale.id
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-              }`}
-            >
-              {scale.name}
-            </button>
+        <div className="flex flex-col gap-2">
+          {[
+            ["major", "major-pentatonic"],
+            ["natural-minor", "melodic-minor", "minor-pentatonic", "blues"],
+            ["chromatic"],
+          ].map((row, i) => (
+            <div key={i} className="flex flex-wrap gap-2">
+              {row.map((id) => {
+                const scale = SCALES.find((s) => s.id === id)!;
+                return (
+                  <button
+                    key={scale.id}
+                    onClick={() => handleScaleChange(scale)}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      selectedScale.id === scale.id
+                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                        : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                    }`}
+                  >
+                    {scale.name}
+                  </button>
+                );
+              })}
+            </div>
           ))}
         </div>
       </div>
