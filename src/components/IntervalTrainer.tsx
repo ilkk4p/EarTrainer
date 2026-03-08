@@ -1,8 +1,8 @@
 import { useState, useCallback } from "react";
-import { Play, RotateCcw, Volume2, Check, X, Music, Layers } from "lucide-react";
+import { Play, RotateCcw, Volume2, Check, X, Music, Layers, Piano } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SCALES, INTERVAL_NAMES, getIntervalsForScale, type Scale } from "@/lib/scales";
-import { playInterval, replayInterval } from "@/lib/audio";
+import { playInterval, replayInterval, type Instrument } from "@/lib/audio";
 
 type PlayMode = "melodic" | "harmonic";
 
@@ -16,6 +16,7 @@ const IntervalTrainer = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [stats, setStats] = useState({ correct: 0, total: 0 });
   const [playMode, setPlayMode] = useState<PlayMode>("melodic");
+  const [instrument, setInstrument] = useState<Instrument>("piano");
 
   const availableIntervals = getIntervalsForScale(selectedScale);
 
@@ -25,15 +26,15 @@ const IntervalTrainer = () => {
     setCurrentInterval(randomInterval);
     setSelectedAnswer(null);
     setGameState("guessing");
-    const root = playInterval(randomInterval, playMode === "harmonic");
+    const root = playInterval(randomInterval, playMode === "harmonic", instrument);
     setCurrentRoot(root);
-  }, [selectedScale, playMode]);
+  }, [selectedScale, playMode, instrument]);
 
   const handleReplay = useCallback(() => {
     if (currentInterval !== null && currentRoot !== null) {
-      replayInterval(currentRoot, currentInterval, playMode === "harmonic");
+      replayInterval(currentRoot, currentInterval, playMode === "harmonic", instrument);
     }
-  }, [currentInterval, currentRoot, playMode]);
+  }, [currentInterval, currentRoot, playMode, instrument]);
 
   const handleGuess = useCallback(
     (semitones: number) => {
@@ -132,6 +133,34 @@ const IntervalTrainer = () => {
           </button>
         </div>
       </div>
+
+      {/* Instrument Selection */}
+      <div className="w-full max-w-2xl mb-8">
+        <label className="block text-sm font-medium text-muted-foreground mb-3 uppercase tracking-wider">
+          Instrument
+        </label>
+        <div className="flex gap-2">
+          {([
+            { id: "piano" as Instrument, label: "Piano", icon: Piano },
+            { id: "guitar" as Instrument, label: "Guitar", icon: Music },
+            { id: "trumpet" as Instrument, label: "Trumpet", icon: Volume2 },
+          ]).map((inst) => (
+            <button
+              key={inst.id}
+              onClick={() => setInstrument(inst.id)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                instrument === inst.id
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+              }`}
+            >
+              <inst.icon className="w-4 h-4" />
+              {inst.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Play Controls */}
       <div className="flex items-center gap-4 mb-10">
         <Button
