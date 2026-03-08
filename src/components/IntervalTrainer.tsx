@@ -16,6 +16,7 @@ const IntervalTrainer = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [stats, setStats] = useState({ correct: 0, total: 0 });
   const [playMode, setPlayMode] = useState<PlayMode>("melodic");
+  const [instrument, setInstrument] = useState<Instrument>("piano");
 
   const availableIntervals = getIntervalsForScale(selectedScale);
 
